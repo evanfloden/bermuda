@@ -101,7 +101,7 @@ class BermudaFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
 
         return self.async_show_form(
             step_id="user",
-            description_placeholders={"name": NAME, "github_url": "https://github.com/jleinenbach/bermuda"},
+            description_placeholders={"name": NAME, "github_url": "https://github.com/evanfloden/bermuda"},
         )
 
     async def async_step_user(self, user_input: dict[str, Any] | None = None) -> ConfigFlowResult:
@@ -120,7 +120,7 @@ class BermudaFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
 
         return self.async_show_form(
             step_id="user",
-            description_placeholders={"name": NAME, "github_url": "https://github.com/jleinenbach/bermuda"},
+            description_placeholders={"name": NAME, "github_url": "https://github.com/evanfloden/bermuda"},
         )
 
     @staticmethod

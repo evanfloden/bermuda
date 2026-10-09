@@ -2,7 +2,7 @@
 Custom integration to integrate Bermuda BLE Trilateration with Home Assistant.
 
 For more details about this integration, please refer to
-https://github.com/jleinenbach/bermuda
+https://github.com/evanfloden/bermuda
 """
 
 # mypy: ignore-errors
