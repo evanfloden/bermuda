@@ -1,3 +1,9 @@
+> **This fork (evanfloden/bermuda)** is the [jleinenbach FMDN fork](https://github.com/jleinenbach/bermuda)
+> (Google Find My Device Network tags via [GoogleFindMy-HA](https://github.com/BSkando/GoogleFindMy-HA)'s
+> EID resolver) merged with upstream [agittins/bermuda](https://github.com/agittins/bermuda) v0.8.7 and
+> main as of 2026-07-22. Releases are tagged `v<upstream>-fmdn.<n>` and install through HACS as a
+> custom repository. Tested against Home Assistant 2026.10 on Python 3.14.
+
 ![Bermuda Logo](img/logo@2x.png)
 
 > **This is a fork of [agittins/bermuda](https://github.com/agittins/bermuda).**
