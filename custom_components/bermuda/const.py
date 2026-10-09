@@ -22,7 +22,7 @@ DATA_EID_RESOLVER = "eid_resolver"
 # that the component has been checked out from git, not pulled from
 # an officially built release. HACS will use the git tag (or the zip file,
 # either way it works).
-VERSION = "0.0.0"
+VERSION = "0.8.7-fmdn.1"
 
 ATTRIBUTION = "Data provided by http://jsonplaceholder.typicode.com/"
 ISSUE_URL = "https://github.com/evanfloden/bermuda/issues"
