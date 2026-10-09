@@ -4,9 +4,9 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any
 
-from homeassistant.components.device_tracker.config_entry import BaseTrackerEntity
+from homeassistant.components.device_tracker import BaseScannerEntity
 from homeassistant.components.device_tracker.const import SourceType
-from homeassistant.const import MATCH_ALL, STATE_HOME
+from homeassistant.const import MATCH_ALL, STATE_HOME, STATE_NOT_HOME
 from homeassistant.core import HomeAssistant, callback
 from homeassistant.helpers.dispatcher import async_dispatcher_connect
 
@@ -69,16 +69,20 @@ async def async_setup_entry(
     # await coordinator.async_config_entry_first_refresh()
 
 
-class BermudaDeviceTracker(BermudaEntity, BaseTrackerEntity):
+class BermudaDeviceTracker(BermudaEntity, BaseScannerEntity):
     """A trackable Bermuda Device."""
+
+    # Upstream v0.8.7 (#763): BaseScannerEntity instead of BaseTrackerEntity, so
+    # in_zones and zone person counts work from HA 2026.7 (the tracker base now
+    # leans on lat/long being present to report its state).
 
     _attr_should_poll = False
     _attr_has_entity_name = True
     _attr_translation_key = "tracker"
-    # Override BaseTrackerEntity's default DIAGNOSTIC category.
+    # Override the tracker base's default DIAGNOSTIC category.
     # Bermuda's device_tracker is the PRIMARY function (location tracking for Person entities),
     # not diagnostic information about a device.
-    # BaseTrackerEntity narrows Entity's EntityCategory | None to EntityCategory,
+    # The tracker base narrows Entity's EntityCategory | None to EntityCategory,
     # but we intentionally want None here (no category = primary entity).
     _attr_entity_category = None  # type: ignore[assignment]
 
@@ -88,6 +92,7 @@ class BermudaDeviceTracker(BermudaEntity, BaseTrackerEntity):
     # Recording them here creates redundant DB writes on every area change.
     # The device_tracker state itself (home/not_home/zone) is still recorded.
     _unrecorded_attributes = frozenset({MATCH_ALL})
+    _attr_source_type = SourceType.BLUETOOTH_LE
 
     @property
     def unique_id(self) -> str:
@@ -104,14 +109,12 @@ class BermudaDeviceTracker(BermudaEntity, BaseTrackerEntity):
         return {"scanner": _scannername, "area": self._device.area_name}
 
     @property
-    def state(self) -> str:
-        """Return the state of the device."""
-        return self._device.zone
-
-    @property
-    def source_type(self) -> SourceType:
-        """Return the source type, eg gps or router, of the device."""
-        return SourceType.BLUETOOTH_LE
+    def is_connected(self) -> bool | None:  # type: ignore[override]
+        """Give boolean result for home/not_home."""
+        if self._device.zone is None:
+            return None
+        # if anything other than not home, we are connected.
+        return self._device.zone != STATE_NOT_HOME
 
     @property
     def icon(self) -> str:

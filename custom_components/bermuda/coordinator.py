@@ -501,7 +501,10 @@ class BermudaDataUpdateCoordinator(DataUpdateCoordinator[Any]):
             if device_entry := self.dr.async_get(ev.data["device_id"]):
                 # Work out if it's a device that interests us and respond appropriately.
                 # First check identifiers for googlefindmy devices
-                # Handle variable-length identifiers (some integrations like HomeKit use 3+ elements)
+                # Handle variable-length identifiers (some integrations like HomeKit use 3+ elements).
+                # This also covers upstream #783: a malformed identifier (e.g. a bare string
+                # stored as many single-character elements) is skipped or read safely here
+                # instead of breaking the whole handler with a ValueError on unpacking.
                 for identifier in device_entry.identifiers:
                     if len(identifier) < 2:
                         continue
